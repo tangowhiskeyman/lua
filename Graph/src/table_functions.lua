@@ -47,7 +47,7 @@ function to_string(table)
     str = ""
 
     if not table then
-        print(1)
+
         str = "nil"
 
     elseif not type(table) == "table" then

@@ -24,29 +24,33 @@ function GraphFactory:GetInstance()
     return instance
 end
 
+function GraphFactory:GetGraph ( graphTable )
 
-function GetGraph ( graphTable )
+    print_table(graphTable)
 
-    parent = Graph:new { value = graphTable }
+    graph = Graph:new { value = graphTable }
 
     for _, child in next, graphTable do
 
-        if type(child) == "table" then -- child, graph
+        if type(child) == "table" then -- child graph
 
-            child = GetGraph(v)
-
+            child_graph = GraphFactory:GetInstance():GetGraph(child)
 
         else -- leaf
 
-            child = Graph:new { value =  v, parent = parent }
+            child_graph = Graph:new { value =  child, parent = graph }
 
         end
 
-        parent:addChild ( child )
+        graph:addChild ( child_graph )
+
+        if _ ~= #graphTable then
+
+            return  graph
+
+        end
 
     end
-
-    return  parent
 
 end
 
