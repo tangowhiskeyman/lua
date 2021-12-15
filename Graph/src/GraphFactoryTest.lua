@@ -11,8 +11,8 @@ graph_table =
 
 
 
-GraphFactory:GetInstance():GetGraph(graph_table)
-print(1)
-print_table(graph:getValue())
+graph = GraphFactory:GetInstance():GetGraph(graph_table)
 
+print_table(graph:getGraphTable())
 
+--print_table(graph:getChildren())

@@ -26,31 +26,45 @@ end
 
 function GraphFactory:GetGraph ( graphTable )
 
-    print_table(graphTable)
+    if not type(graphTable) == "table" then
 
-    graph = Graph:new { value = graphTable }
+        error("graphTable must be a table got: ", type(graphTable), graphTable)
+
+    elseif #graphTable == 0 then
+
+        error("graphTable must be a table with at least one element got: ", print_table(graphTable))
+
+    else
+
+        value = graphTable[1]
+
+    end
+
+    graph = Graph:new { graphTable = graphTable, value =  value }
 
     for _, child in next, graphTable do
 
-        if type(child) == "table" then -- child graph
+        if _ > 1 then
 
-            child_graph = GraphFactory:GetInstance():GetGraph(child)
+            if type(child) == "table" then -- child graph
 
-        else -- leaf
+                child_graph = GraphFactory:GetInstance():GetGraph(child)
 
-            child_graph = Graph:new { value =  child, parent = graph }
+            else -- leaf
 
-        end
+                child_graph = Graph:new { value =  child, parent = graph }
 
-        graph:addChild ( child_graph )
+            end
 
-        if _ ~= #graphTable then
+            graph:addChild ( child_graph )
 
-            return  graph
+            print_table(graph:getChildren())
 
         end
 
     end
+
+    return  graph
 
 end
 

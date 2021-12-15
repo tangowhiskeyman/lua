@@ -1,42 +1,105 @@
 require "table_functions"
 
-Graph = { }
+Graph = { graphTable = nil, parent = nil, children = nil}
 
-function Graph:new (o, value, parent )
+function Graph:new (o, graphTable, parent, children)
 
     o = o or { }
     setmetatable(o, self)
     self.__index = self
-
-    self.value =  value or { }
-    self.parent = parent or { }
+    self.graphTable = graphTable
+    self.parent = parent
+    self.children = children
 
     return o
 
 end
 
+function Graph:getGraphTable ()
+
+    return self.graphTable
+
+end
+
+function Graph:setGraphTable (graph_table)
+
+    self.graphTable = graphTable
+
+end
+
+
 function Graph:getValue ()
 
-    return self.value
+    if self.graphTable then
+
+        return self.graphTable[1]
+
+    else
+
+        return nil
+
+    end
 
 end
 
 function Graph:setValue (value)
 
-    self.value = value
+    if not self.graphTable then
+
+        self.graphTable = { }
+
+    end
+
+    self.graphTable[1] = value
 
 end
 
+function Graph:getChildren ()
 
-function Graph:addChild (child)
-
-    table.insert (self.value, #self.value + 1, child.value)
-
-
-
-    child.parent = self
+    return self.children
 
 end
+
+function Graph:setChildren (children)
+
+    self.children = children
+
+end
+
+function Graph:getParent ()
+
+    return (self.parent)
+
+end
+
+function Graph:setParent (parent)
+
+    self.parent = parent
+
+end
+
+function Graph:addChild (childGraph)
+
+    if not self.children then
+
+        self.children = { }
+
+    end
+
+    table.insert (self.children,  #self.children + 1, childGraph)
+
+    if not self.graphTable[2] then
+
+        self.graphTable[2] = { }
+
+    end
+
+    table.insert (self.graphTable[2],  #self.graphTable[2] + 1, childGraph:getValue())
+
+    childGraph.parent = self
+
+end
+
 
 function Graph:toString()
 
