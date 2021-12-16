@@ -1,6 +1,6 @@
 require "table_functions"
 
-Graph = { graphTable = nil, parent = nil, children = nil}
+Graph = { visiting = { }, graphTable = nil, parent = nil, children = nil}
 
 function Graph:new (o, graphTable, parent, children)
 
@@ -56,6 +56,12 @@ end
 
 function Graph:getChildren ()
 
+    if not self.children then
+
+        self.children = { }
+
+    end
+
     return self.children
 
 end
@@ -65,6 +71,13 @@ function Graph:setChildren (children)
     self.children = children
 
 end
+
+function Graph:hasChildren()
+
+
+
+end
+
 
 function Graph:getParent ()
 
@@ -103,25 +116,35 @@ end
 
 function Graph:toString()
 
-    str = self.value
+    str = self:getValue()
 
-    for _, child in next, self.children do
+    children = self:getChildren()
 
-        str = str .. "{ "
+    if not self.visiting[self] then
 
-        str = str .. child.toString()
+        self.visiting[self] = true
 
-        str = str .. " }"
+        for _, child in next, children do
 
-        if not(_ == #self.children) then
+            child.visiting = self.visiting
 
-            str = str .. ", "
+            str = str .. "{ "
+
+            str = str .. child.toString()
+
+            str = str .. " }"
+
+            if not(_ == #children) then
+
+                str = str .. ", "
+
+            end
 
         end
 
-    end
+        str = "{ " .. str .. " }"
 
-    str = "{ " .. str .. " }"
+    end
 
     return str
 

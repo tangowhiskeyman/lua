@@ -29,19 +29,24 @@ graph_table =
 --print_table(single_child_graph:getChildren())
 --print_table(single_child_graph:getGraphTable())
 
-simple_parent_table = { 'simple_parent_leaf' }
-simple_parent_graph = Graph:new{ graphTable = simple_parent_table }
+simple_table = { 'parent' }
+simple_graph = Graph:new{ graphTable = simple_table }
+print (simple_graph:toString())
 
-single_child_table = { 'single_child_leaf' }
-single_child_graph = Graph:new{ graphTable = { single_child_table } }
+single_child =  'single_child'
+single_child_graph = Graph:new{ graphTable = { single_child } }
 
-print_table(simple_parent_graph:getGraphTable())
+simple_graph:addChild(single_child_graph)
+print (simple_graph:toString())
 
-simple_parent_graph:addChild(single_child_graph)
+print_table(simple_graph:getGraphTable())
+--pr
+--simple_parent_graph:addChild(single_child_graph)
+--
+--print_table(single_child_graph:getParent():getGraphTable())
+--print_table(simple_parent_graph:getGraphTable())
 
-print_table(single_child_graph:getParent():getGraphTable())
-print_table(simple_parent_graph:getGraphTable())
 
 
+--print_table(simple_parent_graph:getChildren())
 
-print_table(simple_parent_graph:getChildren())
