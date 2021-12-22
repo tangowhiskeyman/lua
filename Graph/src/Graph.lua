@@ -1,38 +1,45 @@
-require "table_functions"
+require "DataDumper"
 
-Graph = { visiting = { }, graphTable = nil, parent = nil, children = nil}
+Graph = { value = nil , parentGraph = nil, graphChildren = nil}
 
-function Graph:new (o, graphTable, parent, children)
+function Graph:new (o, value, parentGraph, graphChildren)
 
     o = o or { }
     setmetatable(o, self)
     self.__index = self
-    self.graphTable = graphTable
-    self.parent = parent
-    self.children = children
+    self.value = value
+    self.parentGraph = parentGraph
+    self.graphChildren = graphChildren
 
     return o
 
 end
 
-function Graph:getGraphTable ()
-
-    return self.graphTable
-
-end
-
-function Graph:setGraphTable (graph_table)
-
-    self.graphTable = graphTable
-
-end
-
-
 function Graph:getValue ()
 
-    if self.graphTable then
+    return self.value
 
-        return self.graphTable[1]
+end
+
+function Graph:setValue (value)
+
+    self.value = value
+
+end
+
+function Graph:getChildren ()
+
+    if self.value then
+
+        if type( self.value == "table" ) then
+
+            return self.value[2]
+
+        else
+
+            return nil
+
+        end
 
     else
 
@@ -42,107 +49,155 @@ function Graph:getValue ()
 
 end
 
-function Graph:setValue (value)
-
-    if not self.graphTable then
-
-        self.graphTable = { }
-
-    end
-
-    self.graphTable[1] = value
-
-end
-
-function Graph:getChildren ()
-
-    if not self.children then
-
-        self.children = { }
-
-    end
-
-    return self.children
-
-end
-
 function Graph:setChildren (children)
 
-    self.children = children
+    self.value[2] = children
+
+end
+
+function Graph:getGraphChildren ()
+
+    return self.graphChildren
+
+end
+
+function Graph:setGraphChildren (children)
+
+    self.graphChildren = children
 
 end
 
 function Graph:hasChildren()
 
+    children = self:getChildren()
 
+    return  children and type( children == "table")
 
 end
 
+function Graph:hasGraphChildren()
+
+    return  self.graphChildren and #self.graphChildren > 0
+
+end
 
 function Graph:getParent ()
 
-    return (self.parent)
+    return self.value[1]
 
 end
 
 function Graph:setParent (parent)
 
-    self.parent = parent
+    if not self.value then
 
-end
-
-function Graph:addChild (childGraph)
-
-    if not self.children then
-
-        self.children = { }
+        self.value = { }
 
     end
 
-    table.insert (self.children,  #self.children + 1, childGraph)
-
-    if not self.graphTable[2] then
-
-        self.graphTable[2] = { }
-
-    end
-
-    table.insert (self.graphTable[2],  #self.graphTable[2] + 1, childGraph:getValue())
-
-    childGraph.parent = self
+    self.value[1] = parent
 
 end
 
+function Graph:getParentGraph ()
 
-function Graph:toString()
+    return self.parentGraph
 
-    str = self:getValue()
+end
 
-    children = self:getChildren()
+function Graph:setParentGraph (parentGraph)
 
-    if not self.visiting[self] then
+    return self.parentGraph == parentGraph
 
-        self.visiting[self] = true
+end
 
-        for _, child in next, children do
+function Graph:hasParentGraph()
 
-            child.visiting = self.visiting
+    return self.parentGraph
 
-            str = str .. "{ "
+end
 
-            str = str .. child.toString()
+function Graph:addChild (child)
 
-            str = str .. " }"
+    if not debug.getinfo(2).name ~= "SetGraph" then
 
-            if not(_ == #children) then
+        if not self:hasChildren() then
 
-                str = str .. ", "
-
-            end
+            self:setChildren ( { } )
 
         end
 
-        str = "{ " .. str .. " }"
+        children = self:getChildren()
+
+        table.insert ( children,  #children + 1, child)
+
+    end
+
+end
+
+function Graph:addChildGraph (child)
+
+    if not self:hasGraphChildren() then
+
+        self:setGraphChildren ( { } )
+
+    end
+
+    graphChildren = self:getGraphChildren()
+
+    table.insert ( graphChildren,  #graphChildren + 1, child)
+
+    child:setParentGraph ( self )
+
+
+end
+
+function Graph:valueToString()
+
+    return to_string ( self:getValue() )
+
+end
+
+
+
+
+local visiting = { }
+
+function Graph:toString()
+
+    str = "value = " .. self:valueToString()
+
+    if self:hasGraphChildren() then
+
+        str = str .. ", graphChildren = "
+
+        children = self:getGraphChildren()
+
+        if not visiting[self] then
+
+            visiting[self] = true
+
+            for _, child in next, children do
+
+                child.visiting = self.visiting
+
+                str = str .. "{ "
+
+                str = str .. child:toString()
+
+                str = str .. " }"
+
+                if not(_ == #children) then
+
+                    str = str .. ", "
+
+                end
+
+            end
+
+            str = "{ " .. str .. " }"
+
+        end
 
     end
 
@@ -151,10 +206,12 @@ function Graph:toString()
 end
 
 
+function Graph:toString()
+
+    return DataDumper(self)
+
+end
+
 return Graph
-
-
-
-
 
 

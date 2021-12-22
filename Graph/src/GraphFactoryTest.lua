@@ -1,5 +1,5 @@
 require "GraphFactory"
-require "table_functions"
+require "Graph"
 
 graph_table =
 
@@ -11,8 +11,6 @@ graph_table =
 
 
 
-graph = GraphFactory:GetInstance():GetGraph(graph_table)
+graph = GetGraph( graph_table )
 
-print_table(graph:getGraphTable())
-
---print_table(graph:getChildren())
+print ( graph:toString() )

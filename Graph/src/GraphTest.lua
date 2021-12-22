@@ -9,44 +9,31 @@ graph_table =
     { 'uncle', {
         { 'cousin_1' }, { 'cousin_2' }}}}}
 
---graph_table2 = { 'uncle', { { 'cousin_1' }, { 'cousin_2' }}}
 
---graph = Graph:new{ graphTable = graph_table }
---print_table(graph:getGraphTable())
---graph2 = Graph:new{ value = graph_table2 }
---print_table(graph2:getValue())
---graph:setValue(graph_table2)
---print_table(graph:getGraphTable())
---print_table(single_child_table)
---single_child_graph = Graph:new{ graphTable = single_child_table}
 
---print_table(single_child_graph:getGraphTable())
---graph:addChild(single_child_graph)
---print_table(graph:getGraphTable())
---print_table(single_child_graph:getChildren())
---single_child_graph:addChild(single_child_graph2)
---print_table(graph:getGraphTable())
---print_table(single_child_graph:getChildren())
---print_table(single_child_graph:getGraphTable())
+simple_graph = Graph:new()
+simple_graph:setParent("parent")
+child_graph = Graph:new{ value = 'child' }
+simple_graph:addChild(child_graph)
+--print ( simple_graph:valueToString())
+--print ( to_string(simple_graph))
+print ( to_string2(simple_graph))
 
-simple_table = { 'parent' }
-simple_graph = Graph:new{ graphTable = simple_table }
-print (simple_graph:toString())
 
-single_child =  'single_child'
-single_child_graph = Graph:new{ graphTable = { single_child } }
-
-simple_graph:addChild(single_child_graph)
-print (simple_graph:toString())
-
-print_table(simple_graph:getGraphTable())
---pr
---simple_parent_graph:addChild(single_child_graph)
 --
---print_table(single_child_graph:getParent():getGraphTable())
---print_table(simple_parent_graph:getGraphTable())
+--
+--
+--child_graph2 = Graph:new{ value = 'child2' }
+--print ( child_graph2:valueToString())
+--
+--simple_graph:addChildGraph(child_graph2)
+--print ( simple_graph:valueToString())
 
-
-
---print_table(simple_parent_graph:getChildren())
-
+--print_table ( simple_graph:getParent())
+--print_table ( simple_graph:getChildren())
+--
+--complexGraph = Graph:new { value = graph_table }
+--print (to_string ( complexGraph:getValue() ))
+--
+--print_table ( complexGraph:getParent())
+--print ( complexGraph:toString())

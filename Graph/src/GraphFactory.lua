@@ -2,69 +2,44 @@ require "Graph"
 
 GraphFactory = { }
 
-instance = nil
+function GetGraphHelper  (graph, visiting)
 
-function GraphFactory:new()
+    graphTable = graph:getValue()
 
-    o = o or { }
-    setmetatable(o, self)
-    self.__index = self
+    if not visiting [ graphTable ] then
 
-    return o
-end
+        visiting [ graphTable ] = true
 
-function GraphFactory:GetInstance()
+        for _, value in pairs( graphTable ) do
 
-    if not instance then
+            if type ( value ) == "table" then
 
-        instance = GraphFactory:new()
+                childGraph = Graph:new { value = value }
 
-    end
+                graph:addChildGraph ( childGraph )
 
-    return instance
-end
-
-function GraphFactory:GetGraph ( graphTable )
-
-    if not type(graphTable) == "table" then
-
-        error("graphTable must be a table got: ", type(graphTable), graphTable)
-
-    elseif #graphTable == 0 then
-
-        error("graphTable must be a table with at least one element got: ", print_table(graphTable))
-
-    else
-
-        value = graphTable[1]
-
-    end
-
-    graph = Graph:new { graphTable = graphTable, value =  value }
-
-    for _, child in next, graphTable do
-
-        if _ > 1 then
-
-            if type(child) == "table" then -- child graph
-
-                child_graph = GraphFactory:GetInstance():GetGraph(child)
-
-            else -- leaf
-
-                child_graph = Graph:new { value =  child, parent = graph }
+                return GetGraphHelper ( childGraph, visiting )
 
             end
-
-            graph:addChild ( child_graph )
-
-            print_table(graph:getChildren())
 
         end
 
     end
 
-    return  graph
+    return graph
+
+end
+
+
+function GetGraph ( graphTable )
+
+    local visiting = { }
+
+    graph = Graph:new { value = graphTable }
+
+    GetGraphHelper ( graph, visiting )
+
+    return graph
 
 end
 

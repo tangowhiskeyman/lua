@@ -1,14 +1,15 @@
+
 table_functions = { }
 
-to_string_helper = function (graph_table, visiting)
+function to_string_helper (graph_table, visiting)
 
-    local str = ""
+    str = ""
 
-    if not visiting[graph_table] then
+    if type(graph_table) == "table" then --table
 
-        visiting[graph_table] = true
+        if not visiting[graph_table] then
 
-        if type(graph_table) == "table" then --table
+            visiting[ graph_table ] = true
 
             str = str .. "{ "
 
@@ -25,21 +26,19 @@ to_string_helper = function (graph_table, visiting)
             end
 
             str = str .. " }"
+        end
 
-        elseif type(graph_table) == "string" then
+    elseif type(graph_table) == "string" then
 
             str = str .. "'" .. graph_table .. "'"
 
-        else
+    else
 
-            str = str .. tostring(graph_table)
-
-        end
+        str = str .. tostring(graph_table)
 
     end
 
-
-    return (str)
+    return str
 
 end
 
@@ -51,10 +50,92 @@ function to_string(graph_table)
 
 end
 
-function print_table(graph_table)
 
-    print(to_string(graph_table))
+
+function to_string_helper2 (graph_table, visiting)
+
+    str = ""
+
+    if type(graph_table) == "table" then --table
+
+        if not visiting[graph_table] then
+
+            visiting[ graph_table ] = true
+
+            str = str .. "{ "
+
+            function pairsByKeys (t, f)
+
+                local a = { }
+
+                for n in pairs( t ) do -- create a list with all keys
+
+                    a[ #a + 1 ] = n
+
+                end
+
+                table.sort( a, function ( a, b ) if a > b then return a end end ) -- sort the list
+
+                local i = 0 -- iterator variable
+
+                return function () -- iterator function
+
+                    i = i + 1
+
+                    return a[ i ], t[ a[ i ] ], i, #a -- return key, value, index, size
+
+                end
+
+            end
+
+            for key, val, i, size in pairsByKeys(graph_table) do
+
+                if key and type(key) == "string" then
+
+                    str = str .. tostring(key) .. " = ".. to_string_helper2 ( val, visiting )
+
+                else
+
+                    str = str .. to_string_helper2 ( val, visiting )
+
+                end
+
+                if size ~= i then
+
+                    str = str .. ", "
+
+                end
+
+            end
+
+            str = str .. " } "
+
+        end
+
+    elseif type(graph_table) == "string" then
+
+        str = str .. "'" .. graph_table .. "'"
+
+    else
+
+        str = str .. tostring(graph_table)
+
+    end
+
+    return str
 
 end
+
+function to_string2(graph_table)
+
+    local visiting = { }
+
+    local tab = ""
+
+    return to_string_helper2(graph_table, visiting, tab)
+
+end
+
+
 
 return table_functions
