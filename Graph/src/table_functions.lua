@@ -7,17 +7,17 @@ function to_string_helper (graph_table, visiting)
 
     if type(graph_table) == "table" then --table
 
+        --str = str .. "{ "
+
         if not visiting[graph_table] then
 
             visiting[ graph_table ] = true
-
-            str = str .. "{ "
 
             for _, child in next, graph_table do
 
                 str = str .. to_string_helper(child, visiting)
 
-                if _ ~= #graph_table then
+                if next (graph_table, _) then
 
                     str = str .. ", "
 
@@ -25,8 +25,9 @@ function to_string_helper (graph_table, visiting)
 
             end
 
-            str = str .. " }"
         end
+
+        --str = str .. " }"
 
     elseif type(graph_table) == "string" then
 
@@ -38,6 +39,8 @@ function to_string_helper (graph_table, visiting)
 
     end
 
+
+
     return str
 
 end
@@ -46,7 +49,7 @@ function to_string(graph_table)
 
     local visiting = { }
 
-    return to_string_helper(graph_table, visiting)
+    return "{ " .. to_string_helper(graph_table, visiting) .. " }"
 
 end
 

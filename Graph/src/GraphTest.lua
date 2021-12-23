@@ -11,29 +11,34 @@ graph_table =
 
 
 
+
+
 simple_graph = Graph:new()
+print ( simple_graph:valueToString())
 simple_graph:setParent("parent")
+print ( simple_graph:valueToString())
 child_graph = Graph:new{ value = 'child' }
+--print ( child_graph:valueToString())
+--grand_child_graph = Graph:new{ value = 'grand_child' }
+--print ( grand_child_graph:valueToString())
+--child_graph:addChild(grand_child_graph)
+--print ( child_graph:valueToString())
 simple_graph:addChild(child_graph)
---print ( simple_graph:valueToString())
---print ( to_string(simple_graph))
-print ( to_string2(simple_graph))
+print ( simple_graph:valueToString())
 
-
---
---
---
+--simple_graph2 = Graph:new()
+--print ( simple_graph2:valueToString())
+--simple_graph2:setParent("parent2")
+--print ( simple_graph2:valueToString())
 --child_graph2 = Graph:new{ value = 'child2' }
 --print ( child_graph2:valueToString())
+--grand_child_graph2 = Graph:new{ value = 'grand_child2' }
+--print ( grand_child_graph2:valueToString())
+--child_graph2:addChild(grand_child_graph2)
+--print ( child_graph2:valueToString())
+--simple_graph2:addChild(child_graph2)
+--print ( simple_graph2:valueToString())
 --
---simple_graph:addChildGraph(child_graph2)
---print ( simple_graph:valueToString())
-
---print_table ( simple_graph:getParent())
---print_table ( simple_graph:getChildren())
+--simple_graph2:addChild(simple_graph)
 --
---complexGraph = Graph:new { value = graph_table }
---print (to_string ( complexGraph:getValue() ))
---
---print_table ( complexGraph:getParent())
---print ( complexGraph:toString())
+--print ( simple_graph2:valueToString())

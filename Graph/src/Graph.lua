@@ -51,6 +51,19 @@ end
 
 function Graph:setChildren (children)
 
+    if type(self.value) ~= "table" then
+        print (1)
+        self.value = {  }
+
+    end
+
+    if type(self.value[2]) ~= "table" then
+        print (2)
+        self.value[2] = {  { } }
+
+    end
+
+
     self.value[2] = children
 
 end
@@ -123,13 +136,19 @@ function Graph:addChild (child)
 
         if not self:hasChildren() then
 
-            self:setChildren ( { } )
+            self:setChildren ( {  } )
+
+
 
         end
 
         children = self:getChildren()
 
-        table.insert ( children,  #children + 1, child)
+        print (children)
+        print (self.value)
+        print (self.value[1])
+        print (self.value[2])
+        table.insert ( children,  #children + 1, child:getValue() )
 
     end
 
@@ -154,22 +173,23 @@ end
 
 function Graph:valueToString()
 
-    return to_string ( self:getValue() )
+    return to_string ( self )
 
 end
 
 
 
-
-local visiting = { }
-
 function Graph:toString()
+
+    visiting = { }
 
     str = "value = " .. self:valueToString()
 
+    str = str .. ", graphChildren = "
+
     if self:hasGraphChildren() then
 
-        str = str .. ", graphChildren = "
+        str = str .. " = "
 
         children = self:getGraphChildren()
 
@@ -179,13 +199,7 @@ function Graph:toString()
 
             for _, child in next, children do
 
-                child.visiting = self.visiting
-
-                str = str .. "{ "
-
                 str = str .. child:toString()
-
-                str = str .. " }"
 
                 if not(_ == #children) then
 
@@ -195,7 +209,7 @@ function Graph:toString()
 
             end
 
-            str = "{ " .. str .. " }"
+            --str = "{ " .. str .. " }"
 
         end
 
@@ -205,12 +219,6 @@ function Graph:toString()
 
 end
 
-
-function Graph:toString()
-
-    return DataDumper(self)
-
-end
 
 return Graph
 

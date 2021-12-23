@@ -9,9 +9,22 @@ graph_table =
         { 'cousin_1' }, { 'cousin_2' }}}}}
 
 
-dictionary = { name = 'Emre', child = { surname = 'Yanik' } }
+--graph_table = { name = 'Emre', child = { surname = 'Yanik' } }
 
---dictionary = { name = 'Emre', surname = 'Yanik' }
+--graph_table = { name = 'Emre', surname = 'Yanik' }
 
-print ( to_string2 ( dictionary ) )
+--print ( to_string2 ( dictionary ) )
+--
+print ( to_string ( graph_table ) )
+
+
+
+
+
+--repeat
+--
+--    a, b = next (dictionary)
+--    print (a, b)
+--
+--until not a
 
