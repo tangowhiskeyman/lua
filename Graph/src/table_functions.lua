@@ -1,13 +1,14 @@
 
 table_functions = { }
 
-function to_string_helper (graph_table, visiting)
+function to_string_helper (graph_table, visiting, tab)
 
     str = ""
 
     if type(graph_table) == "table" then --table
 
-        --str = str .. "{ "
+        str = str .. "\n" .. tab .. "{ "
+        tab = tab .. "\t"
 
         if not visiting[graph_table] then
 
@@ -15,7 +16,7 @@ function to_string_helper (graph_table, visiting)
 
             for _, child in next, graph_table do
 
-                str = str .. to_string_helper(child, visiting)
+                str = tab .. str ..  to_string_helper(child, visiting, tab)
 
                 if next (graph_table, _) then
 
@@ -27,29 +28,35 @@ function to_string_helper (graph_table, visiting)
 
         end
 
-        --str = str .. " }"
+        str =   str .. " }"
+
+        --str = "\n" .. tab .. "{ " .. str .. " }"
 
     elseif type(graph_table) == "string" then
 
-            str = str .. "'" .. graph_table .. "'"
+        str = str .. "'" .. graph_table .. "'"
 
     else
 
-        str = str .. tostring(graph_table)
+        str = str ..  tostring(graph_table)
 
     end
-
-
 
     return str
 
 end
 
-function to_string(graph_table)
+function to_string(graph_table, tab)
+
+    if not tab then
+
+        tab = ""
+
+    end
 
     local visiting = { }
 
-    return "{ " .. to_string_helper(graph_table, visiting) .. " }"
+    return to_string_helper(graph_table, visiting, tab)
 
 end
 

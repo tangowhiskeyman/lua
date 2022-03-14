@@ -14,15 +14,21 @@ function GetGraphHelper  (graph, visiting)
 
             if type ( value ) == "table" then
 
-                childGraph = Graph:new { value = value }
+                tempGraph = Graph:new { value = value }
+
+                childGraph = GetGraphHelper(tempGraph, visiting)
 
                 graph:addChildGraph ( childGraph )
 
-                return GetGraphHelper ( childGraph, visiting )
+            else
+
+                -- graph:addChild(value)
 
             end
 
         end
+
+
 
     end
 
@@ -37,9 +43,7 @@ function GetGraph ( graphTable )
 
     graph = Graph:new { value = graphTable }
 
-    GetGraphHelper ( graph, visiting )
-
-    return graph
+    return GetGraphHelper ( graph, visiting )
 
 end
 

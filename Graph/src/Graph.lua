@@ -1,4 +1,4 @@
-require "DataDumper"
+require "table_functions"
 
 Graph = { value = nil , parentGraph = nil, graphChildren = nil}
 
@@ -7,6 +7,7 @@ function Graph:new (o, value, parentGraph, graphChildren)
     o = o or { }
     setmetatable(o, self)
     self.__index = self
+
     self.value = value
     self.parentGraph = parentGraph
     self.graphChildren = graphChildren
@@ -14,6 +15,32 @@ function Graph:new (o, value, parentGraph, graphChildren)
     return o
 
 end
+
+function Graph:isGraph()
+
+    return true
+
+end
+
+--original_type = type
+--
+--function type(v)
+--
+--    object_type =  original_type(v)
+--
+--    if object_type == "table" and getmetatable(v) == self then
+--
+--        return "Graph"
+--
+--    else
+--
+--        return original_type(v)
+--
+--    end
+--
+--end
+
+
 
 function Graph:getValue ()
 
@@ -52,13 +79,13 @@ end
 function Graph:setChildren (children)
 
     if type(self.value) ~= "table" then
-        print (1)
+
         self.value = {  }
 
     end
 
     if type(self.value[2]) ~= "table" then
-        print (2)
+
         self.value[2] = {  { } }
 
     end
@@ -84,13 +111,19 @@ function Graph:hasChildren()
 
     children = self:getChildren()
 
-    return  children and type( children == "table")
+    return children and type( children == "table")
 
 end
 
 function Graph:hasGraphChildren()
 
-    return  self.graphChildren and #self.graphChildren > 0
+    --if self.graphChildren then
+    --
+    --    print (self.graphChildren and #self.graphChildren > 0)
+    --
+    --end
+
+    return  (self.graphChildren and #self.graphChildren > 0)
 
 end
 
@@ -120,7 +153,7 @@ end
 
 function Graph:setParentGraph (parentGraph)
 
-    return self.parentGraph == parentGraph
+    self.parentGraph = parentGraph
 
 end
 
@@ -132,23 +165,20 @@ end
 
 function Graph:addChild (child)
 
-    if not debug.getinfo(2).name ~= "SetGraph" then
+    if not debug.getinfo(2).name ~= "GetGraphHelper" then
 
         if not self:hasChildren() then
 
             self:setChildren ( {  } )
 
-
-
         end
 
         children = self:getChildren()
 
-        print (children)
-        print (self.value)
-        print (self.value[1])
-        print (self.value[2])
-        table.insert ( children,  #children + 1, child:getValue() )
+        table.insert ( children,  #children + 1, child )
+
+        --print (child)
+        --child:setParent ( self )
 
     end
 
@@ -168,54 +198,103 @@ function Graph:addChildGraph (child)
 
     child:setParentGraph ( self )
 
+    --if not debug.getinfo(2).name and not debug.getinfo(2).name ~= "GetGraphHelper" then
+    --
+    --    self:addChild(child:getValue())
+    --
+    --end
+
+    --child:setParent(self:getValue())
+
 
 end
 
-function Graph:valueToString()
+function Graph:valueToString(tab)
 
-    return to_string ( self )
+    return to_string ( self:getValue(), tab )
 
 end
 
+function Graph:Search(target)
+
+    if self:getParent() == target then
+
+        return self
+
+    elseif self:hasGraphChildren() then
+
+        graphChildren = self:getGraphChildren()
+
+        for _, v in pairs (graphChildren) do
+
+            return v:Search(target)
+
+        end
+
+    end
+
+end
+
+function toStringHelper(graph, visiting, tab)
+
+    str = "\n"
+
+    if graph and graph.isGraph and graph.isGraph() then
+
+        tab = tab .. "\t"
+
+        if not visiting[graph] then
+
+            visiting[graph] = true
+
+            str = str .. tab .. "graph = " .. tostring(graph) .. "\n"
+
+            str = str .. tab .. "value = " .. graph:valueToString(tab) .. "\n"
+
+            --str = str .. "parentGraph = " .. toStringHelper(graph:getParentGraph(), visiting, tab) .. "\n"
+
+            str = str .. tab .. "parentGraph = " .. tostring(graph:getParentGraph()) .. "\n"
+
+            if graph:hasGraphChildren() then
+
+                str = str .. tab .. "graphChildren = \n\t{"
+
+                graphChildren = graph:getGraphChildren()
+
+                for _, v in pairs (graphChildren) do
+
+                    str = str .. tab .. toStringHelper(v, visiting, tab) --.. ", "
+
+                end
+
+                str = str .. tab .. " }"
+
+            else
+
+                str = str .. tab .. "graphChildren = nil\n"
+
+            end
+
+        end
+
+    else
+
+        return tostring(graph)
+
+    end
+
+    return str
+
+end
 
 
 function Graph:toString()
 
     visiting = { }
 
-    str = "value = " .. self:valueToString()
+    tab = ""
 
-    str = str .. ", graphChildren = "
-
-    if self:hasGraphChildren() then
-
-        str = str .. " = "
-
-        children = self:getGraphChildren()
-
-        if not visiting[self] then
-
-            visiting[self] = true
-
-            for _, child in next, children do
-
-                str = str .. child:toString()
-
-                if not(_ == #children) then
-
-                    str = str .. ", "
-
-                end
-
-            end
-
-            --str = "{ " .. str .. " }"
-
-        end
-
-    end
-
-    return str
+    return toStringHelper(self, visiting, tab)
 
 end
 

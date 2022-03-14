@@ -23,7 +23,7 @@ if not broker then broker = 'localhost'
     {
         ['Switch'] = '1/1/1',
         ['Brightness'] = '1/1/2',
-        ['Unsigned_lnteger']='1/1/3',
+        ['Unsigned_Integer']='1/1/3',
         ['Temperature'] = '1/1/4',
         ['RGB_Color'] = '1/1/5',
         ['Time_And_Day'] = '1/1/6',
@@ -37,7 +37,7 @@ if not broker then broker = 'localhost'
 
         ['1/1/1'] = 'Switch',
         ['1/1/2'] = 'Brightness',
-        ['1/1/3'] = 'Unsigned_lnteger',
+        ['1/1/3'] = 'Unsigned_Integer',
         ['1/1/4'] = 'Temperature',
         ['1/1/5'] = 'RGB_Color',
         ['1/1/6'] = 'Time_And_Day',

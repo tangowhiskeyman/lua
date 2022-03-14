@@ -9,8 +9,10 @@ graph_table =
     { 'uncle', {
         { 'cousin_1' }, { 'cousin_2' }}}}}
 
+simple_table =
+{ 'parent',
+  { 'child', 'child2'}}
 
+graph = GetGraph( simple_table)
 
-graph = GetGraph( graph_table )
-
-print ( graph:toString() )
+print ( graph:Search("child"):toString())
