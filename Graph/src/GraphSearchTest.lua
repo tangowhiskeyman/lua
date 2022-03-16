@@ -1,22 +1,22 @@
 require "GraphFactory"
 require "Graph"
 
---graph_table =
---
---{ 'grand_parent', {
---    { 'parent', {
---        { 'sibling_1' }, { 'leaf' }, { 'sibling_2' }}},
---    { 'uncle', {
---        { 'cousin_1' }, { 'cousin_2' }}}}}
+simple_table = { 1, { 4, 5 } }
 
-simple_table = { 'x' }
+graph_table = { 0,{ { 1, { 4, 5 } }, { 2, { 6, 7 } }, { 3, { 8, 9 } } } }
 
-graph = GetGraph( simple_table)
+target_element = 4
 
-target = graph:Search('x')
+graph = GetGraph( simple_table )
+
+target = graph:Search(target_element)
 
 if target then
 
-  print (target:toString())
+  --print (target:getParent())
+
+  parentGraph =  target:getParentGraph()
+  parent = parentGraph:getParent()
+  parentGraph:setParent(target:get)
   
 end

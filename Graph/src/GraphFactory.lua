@@ -22,17 +22,17 @@ function GetGraphHelper  (graph, visiting)
 
             else
 
-                -- graph:addChild(value)
+                --print ('garph helper val')
+                --graph:addChild(value)
 
             end
 
         end
 
-
+        return graph
 
     end
 
-    return graph
 
 end
 

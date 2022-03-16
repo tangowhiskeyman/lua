@@ -1,18 +1,12 @@
 require "GraphFactory"
 require "Graph"
+require "table_functions"
 
-graph_table =
+graph_table = { 0,{ { 1, { 4, 5 } }, { 2, { 6, 7 } }, { 3, { 8, 9 } } } }
 
-{ 'grand_parent', {
-    { 'parent', {
-        { 'sibling_1' }, { 'leaf' }, { 'sibling_2' }}},
-    { 'uncle', {
-        { 'cousin_1' }, { 'cousin_2' }}}}}
+graph = GetGraph( graph_table)
 
-simple_table =
-{ 'parent',
-  { 'child', 'child2'}}
+graphChildren = graph:getGraphChildren()
 
-graph = GetGraph( simple_table)
-
-print ( graph:Search("child"):toString())
+print (graph:toString())
+--print (to_string (graphChildren))

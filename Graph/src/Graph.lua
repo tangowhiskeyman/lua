@@ -90,7 +90,6 @@ function Graph:setChildren (children)
 
     end
 
-
     self.value[2] = children
 
 end
@@ -186,26 +185,27 @@ end
 
 function Graph:addChildGraph (child)
 
-    if not self:hasGraphChildren() then
+    if child and child.isGraph and child.isGraph() then
 
-        self:setGraphChildren ( { } )
+        if not self.graphChildren then
+
+            self.graphChildren = { }
+
+        end
+
+        table.insert ( self.graphChildren,  #self.graphChildren + 1, child)
+
+        child:setParentGraph ( self )
+
+        --if not debug.getinfo(2).name and not debug.getinfo(2).name ~= "GetGraphHelper" then
+        --
+        --    self:addChild(child:getValue())
+        --
+        --end
+
+        --child:setParent(self:getValue())
 
     end
-
-    graphChildren = self:getGraphChildren()
-
-    table.insert ( graphChildren,  #graphChildren + 1, child)
-
-    child:setParentGraph ( self )
-
-    --if not debug.getinfo(2).name and not debug.getinfo(2).name ~= "GetGraphHelper" then
-    --
-    --    self:addChild(child:getValue())
-    --
-    --end
-
-    --child:setParent(self:getValue())
-
 
 end
 
@@ -215,25 +215,6 @@ function Graph:valueToString(tab)
 
 end
 
-function Graph:Search(target)
-
-    if self:getParent() == target then
-
-        return self
-
-    elseif self:hasGraphChildren() then
-
-        graphChildren = self:getGraphChildren()
-
-        for _, v in pairs (graphChildren) do
-
-            return v:Search(target)
-
-        end
-
-    end
-
-end
 
 function toStringHelper(graph, visiting, tab)
 
@@ -297,6 +278,94 @@ function Graph:toString()
     return toStringHelper(self, visiting, tab)
 
 end
+
+function SearchHelper(graph, visiting, target)
+
+    if graph and graph.isGraph and graph.isGraph() then
+
+        if not visiting[graph] then
+
+            visiting[graph] = true
+
+            if graph:getParent() == target then
+
+                return graph
+
+            else
+
+                if graph:hasGraphChildren() then
+
+                    graphChildren = graph:getGraphChildren()
+
+                    --print (tostring(graphChildren))
+
+                    for _, v in pairs (graphChildren) do
+
+                        result = SearchHelper(v, visiting, target)
+
+                        if result then
+
+                            return result
+
+                        end
+
+                    end
+
+                else
+
+                    if graph:hasChildren() then
+
+                        children = graph:getChildren()
+
+                        if type (children)  == 'table' then
+
+                            for _, v in pairs (graphChildren) do
+
+                                print('v', v)
+
+                                if v == target then
+
+                                    return graph
+
+                                end
+
+                            end
+
+                        else
+
+                            if children == target then
+
+                                return graph
+
+                            end
+
+                        end
+
+                    end
+
+                end
+
+            end
+
+        end
+
+    else
+
+    end
+
+    --return graph
+
+end
+
+
+function Graph:Search(target)
+
+    visiting = { }
+
+    return SearchHelper(self, visiting, target)
+
+end
+
 
 
 return Graph
