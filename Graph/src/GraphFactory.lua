@@ -22,8 +22,6 @@ function GetGraphHelper  (graph, visiting)
 
             else
 
-                --print ('garph helper val')
-                --graph:addChild(value)
 
             end
 

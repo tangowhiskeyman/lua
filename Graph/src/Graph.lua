@@ -164,26 +164,19 @@ end
 
 function Graph:addChild (child)
 
-    if not debug.getinfo(2).name ~= "GetGraphHelper" then
+    if not self:hasChildren() then
 
-        if not self:hasChildren() then
-
-            self:setChildren ( {  } )
-
-        end
-
-        children = self:getChildren()
-
-        table.insert ( children,  #children + 1, child )
-
-        --print (child)
-        --child:setParent ( self )
+        self:setChildren ( {  } )
 
     end
 
+    children = self:getChildren()
+
+    table.insert ( children,  #children + 1, child )
+
 end
 
-function Graph:addChildGraph (child)
+function Graph:addChildGraph (child, setValue)
 
     if child and child.isGraph and child.isGraph() then
 
@@ -197,13 +190,12 @@ function Graph:addChildGraph (child)
 
         child:setParentGraph ( self )
 
-        --if not debug.getinfo(2).name and not debug.getinfo(2).name ~= "GetGraphHelper" then
-        --
-        --    self:addChild(child:getValue())
-        --
-        --end
+        if setValue then
 
-        --child:setParent(self:getValue())
+            self:addChild(child:getValue())
+
+        end
+
 
     end
 
@@ -320,8 +312,6 @@ function SearchHelper(graph, visiting, target)
                         if type (children)  == 'table' then
 
                             for _, v in pairs (graphChildren) do
-
-                                print('v', v)
 
                                 if v == target then
 

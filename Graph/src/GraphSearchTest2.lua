@@ -1,16 +1,22 @@
 require "GraphFactory"
 require "Graph"
 
-local simple_tree = { 'parent', {
-    { 'sibling' }, { 'leaf' } } }
-
-local expected = { 'leaf', {
-    { 'parent', {
-        { 'sibling' } } } } }
+local deeply_nested_tree =
+{ 'level1', {
+    { 'level2', {
+        { 'level3', {
+            { 'level4', {
+                { 'leaf' }}}}}}}}}
+local expected =
+{ 'leaf', {
+    { 'level4', {
+        { 'level3', {
+            { 'level2', {
+                { 'level1' }}}}}}}}}
 
 target_element = 'leaf'
 
-graph = GetGraph(simple_tree)
+graph = GetGraph(deeply_nested_tree)
 
 target = graph:Search(target_element)
 
