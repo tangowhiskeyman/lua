@@ -20,17 +20,13 @@ graph = GetGraph(deeply_nested_tree)
 
 target = graph:Search(target_element)
 
-if target then
-
-    newGraph = Graph:new()
-
-    newGraph:setParent(target:getParent())
-
-    newGraph2 = Graph:new()
+while target do
 
     parentGraph = target:getParentGraph()
 
-    newGraph2:setParent(parentGraph:getParentGraph():getParent())
+    newChildGraph = Graph:new()
+
+    newChildGraph:setParent(parentGraph:getParentGraph():getParent())
 
     parentGraph = parentGraph:getGraphChildren()
 
@@ -38,9 +34,9 @@ if target then
 
         if type(value) == "table" then
 
-            if not (value:getParent() == target_element) then
+            if not (value:getParent() == target:getParent()) then
 
-                newGraph2:addChildGraph(value, true)
+                newChildGraph:addChildGraph(value, true)
 
             end
 
@@ -50,8 +46,14 @@ if target then
 
     end
 
-    newGraph:addChildGraph(newGraph2, true)
+    newGraph = Graph:new()
 
-    print(  newGraph:toString() )
+    newGraph:addChildGraph(newChildGraph, true)
+
+    newGraph:setParent(target:getParent())
+
+    
 
 end
+
+print(  newGraph:toString() )

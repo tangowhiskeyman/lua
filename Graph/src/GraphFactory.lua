@@ -16,9 +16,9 @@ function GetGraphHelper  (graph, visiting)
 
                 tempGraph = Graph:new { value = value }
 
-                childGraph = GetGraphHelper(tempGraph, visiting)
+                newChildGraph = GetGraphHelper(tempGraph, visiting)
 
-                graph:addChildGraph ( childGraph )
+                graph:addChildGraph (newChildGraph)
 
             else
 

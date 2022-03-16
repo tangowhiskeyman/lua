@@ -16,15 +16,11 @@ target = graph:Search(target_element)
 
 if target then
 
-    newGraph = Graph:new()
-
-    newGraph:setParent(target:getParent())
-
-    newGraph2 = Graph:new()
+    newChildGraph = Graph:new()
 
     parentGraph = target:getParentGraph()
 
-    newGraph2:setParent(parentGraph:getParentGraph():getParent())
+    newChildGraph:setParent(parentGraph:getParentGraph():getParent())
 
     parentGraph = parentGraph:getGraphChildren()
 
@@ -34,7 +30,7 @@ if target then
 
             if not (value:getParent() == target_element) then
 
-                newGraph2:addChildGraph(value, true)
+                newChildGraph:addChildGraph(value, true)
 
             end
 
@@ -44,7 +40,11 @@ if target then
 
     end
 
-    newGraph:addChildGraph(newGraph2, true)
+    newGraph = Graph:new()
+
+    newGraph:setParent(target:getParent())
+
+    newGraph:addChildGraph(newChildGraph, true)
 
     print(  newGraph:toString() )
 

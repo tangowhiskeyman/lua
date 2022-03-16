@@ -40,8 +40,6 @@ end
 --
 --end
 
-
-
 function Graph:getValue ()
 
     return self.value
