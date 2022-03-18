@@ -67,22 +67,17 @@ function flipGraph(graph, parentValue)
 
 end
 
-local deeply_nested_tree =
-{ 'level1', {
-    { 'level2', {
-        { 'level3', {
-            { 'level4', {
-                { 'leaf' }}}}}}}}}
+local flat_tree =
+{ 'parent', {
+    { 'sibling_a' }, { 'sibling_b' }, { 'leaf' }, { 'sibling_c' }, { 'sibling_d' }}}
 local expected =
 { 'leaf', {
-    { 'level4', {
-        { 'level3', {
-            { 'level2', {
-                { 'level1' }}}}}}}}}
+    { 'parent', {
+        { 'sibling_a' }, { 'sibling_b' }, { 'sibling_c' }, { 'sibling_d' }}}}}
 
 target_element = 'leaf'
 
-graph = GetGraph(deeply_nested_tree)
+graph = GetGraph(flat_tree)
 
 target = graph:Search(target_element)
 

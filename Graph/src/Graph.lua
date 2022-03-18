@@ -194,7 +194,6 @@ function Graph:addChildGraph (child, setValue)
 
         end
 
-
     end
 
 end
